@@ -4,3 +4,6 @@
 
 # Ignore 'data' folder
 data/
+
+# Ignore .pt files (models)
+*.pt
