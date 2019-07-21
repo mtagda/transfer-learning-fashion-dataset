@@ -108,7 +108,7 @@ def plot_sample_data_model(dataloader, num, model, cat_lookup, use_cuda=True):
                  color=("green" if preds[idx]==labels[idx].item() else "red"))
         
         
-def plot_training_and_valid_loss(train_loss_history, valid_loss_history):
+def plot_training_and_valid_loss(train_loss_history, valid_loss_history, n_epochs):
     # Define a helper function for plotting training and valid loss
     plt.title("Training and Validation Loss vs. Number of Training Epochs")
     plt.xlabel("Training Epochs")
