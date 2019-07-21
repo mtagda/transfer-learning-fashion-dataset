@@ -6,7 +6,7 @@ from torch import optim
 import time
 
 
-def train(n_epochs, train_loader, valid_loader, model, optimizer, criterion, use_cuda, save_path):
+def train(n_epochs, train_loader, valid_loader, model, optimizer, criterion, use_cuda, save_path, scheduler=False):
     """returns trained model"""
     since = time.time()
     
@@ -25,6 +25,11 @@ def train(n_epochs, train_loader, valid_loader, model, optimizer, criterion, use
         ###################
         # train the model #
         ###################
+        
+        # Call the learning rate scheduler if given
+        if scheduler:
+            scheduler.step()
+            
         model.train()
         for batch_idx, (data, target) in enumerate(train_loader):
             # move to GPU
