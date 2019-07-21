@@ -1,5 +1,5 @@
 # transfer-learning-fashion-dataset
-Applying Few shot / Transfer Learning on Fashion Product Images Dataset​ from Kaggle
+Applying Transfer Learning on Fashion Product Images Dataset from Kaggle
 
 ## Getting started: downloading the data
 The best way to download the dataset is to use the kaggle API (see https://github.com/Kaggle/kaggle-api#datasets). Then, you can simply download the .zip file using the following command:
@@ -177,3 +177,44 @@ Test Accuracy of Rain Jacket: 100%
 Test Accuracy of Water Bottle: 100%
 ```
 
+## Conclusions
+
+After analyzing those results, we can see that the last approach for training the classifier gives us best results. One thing to improve the accuracy could be using a lower learning rate (e.g. 0.0001) because the current learning rate of 0.001 seems to be too big. Also, with the new learning rate we could train the networks for more than 20 epochs to get better results. In other words, we should perform hyperparam tuning and try out different pairs of hyperparameters. 
+
+Let us have a look on the accuracy of several rare classes that we get using the best, third approach:
+
+```
+Test Accuracy of Umbrellas:  0% ( 0/ 5)
+Test Accuracy of Body Lotion:  0% ( 0/ 6)
+Test Accuracy of Nail Essentials:  0% ( 0/ 6)
+Test Accuracy of Shrug:  0% ( 0/ 1)
+Test Accuracy of Eye Cream:  0% ( 0/ 6)
+Test Accuracy of Nehru Jackets: N/A (no training examples)
+Test Accuracy of Face Scrub and Exfoliator:  0% ( 0/ 5)
+Test Accuracy of Toner:  0% ( 0/ 5)
+Test Accuracy of Lehenga Choli: N/A (no training examples)
+Test Accuracy of Lip Plumper:  0% ( 0/ 4)
+Test Accuracy of Makeup Remover:  0% ( 0/ 3)
+Test Accuracy of Beauty Accessory:  0% ( 0/ 4)
+Test Accuracy of  Robe:  0% ( 0/ 3)
+Test Accuracy of Trolley Bag: N/A (no training examples)
+Test Accuracy of   Hat:  0% ( 0/ 3)
+Test Accuracy of Lounge Tshirts: N/A (no training examples)
+Test Accuracy of Tablet Sleeve: N/A (no training examples)
+Test Accuracy of Rain Trousers:  0% ( 0/ 1)
+Test Accuracy of Face Serum and Gel:  0% ( 0/ 2)
+Test Accuracy of Key chain:  0% ( 0/ 1)
+Test Accuracy of Ties and Cufflinks:  0% ( 0/ 2)
+Test Accuracy of Shoe Laces:  0% ( 0/ 1)
+Test Accuracy of Body Wash and Scrub:  0% ( 0/ 1)
+Test Accuracy of Mens Grooming Kit:  0% ( 0/ 1)
+Test Accuracy of Cushion Covers: N/A (no training examples)
+Test Accuracy of Hair Accessory: N/A (no training examples)
+Test Accuracy of  Ipad: N/A (no training examples)
+```
+
+To get better results on the classes with a very small number of training samples, we could perform data augmentation. In that way we enlarge our dataset by making minor alterations (such as flips or translations or rotations) to our existing dataset. 
+
+Another good way to improve classification accuracy of the small classes in particular could be using the metadata from `styles.csv` (e.g. masterCategory and subCategory) as additional labels.
+
+Those and other ideas will be investigated in the future.
