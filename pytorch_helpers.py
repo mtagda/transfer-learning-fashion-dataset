@@ -84,11 +84,11 @@ def train(n_epochs, train_loader, valid_loader, model, optimizer, criterion, use
     return model, train_loss_history, valid_loss_history
 
 
-def test(test_loader, model, criterion, use_cuda):    
+def test(test_loader, model, criterion, cat_lookup, use_cuda):    
     # initialize lists to monitor correct guesse and total number of data 
     test_loss = 0.0
-    class_correct = list(0. for i in range(len(cat_list)))
-    class_total = list(0. for i in range(len(cat_list)))
+    class_correct = list(0. for i in range(len(cat_lookup)))
+    class_total = list(0. for i in range(len(cat_lookup)))
 
     model.eval() # prep model for evaluation
 
@@ -116,26 +116,25 @@ def test(test_loader, model, criterion, use_cuda):
     # calculate and print avg test loss
     test_loss = test_loss/len(test_loader.sampler)
     print('Test Loss: {:.6f}\n'.format(test_loss))
-
-    # store the class accuracy
-    class_accuracy = {i: ((class_correct[i] / class_total[i]) if class_total[i]>0 else 0) 
-                      for i in range(len(cat_list))}
-    sorted_class_accuracy = sorted(class_accuracy.items(),  key=lambda kv: kv[1], reverse=True)
     
-    print('Printing 5 classes with greatest accuracy')
-    for i in range(5):
-        print('Test Accuracy of %5s: %2d%%' % (
-            str(num2cat[sorted_class_accuracy[i][0]]), 100 * sorted_class_accuracy[i][1]))
-    
+    class_accuracy = {}
     print('\nPrinting accuracy for each class')
-    for i in range(len(cat_list)):
+    for i in range(len(cat_lookup)):
         if class_total[i] > 0:
+            accuracy = 100 * class_correct[i] / class_total[i]
+            class_accuracy[i] = accuracy
             print('Test Accuracy of %5s: %2d%% (%2d/%2d)' % (
-                num2cat[sorted_class_accuracy[i][0]], 100 * class_correct[i] / class_total[i],
+                cat_lookup[i], accuracy,
                 np.sum(class_correct[i]), np.sum(class_total[i])))
         else:
-            print('Test Accuracy of %5s: N/A (no training examples)' % (num2cat[sorted_class_accuracy[i][0]]))
+            print('Test Accuracy of %5s: N/A (no training examples)' % (cat_lookup[i]))
 
+    print('\nPrinting 5 classes with greatest accuracy')
+    sorted_class_accuracy = sorted(class_accuracy.items(),  key=lambda kv: kv[1], reverse=True)
+    for i in range(5):
+        print('Test Accuracy of %5s: %2d%%' % (
+            str(cat_lookup[sorted_class_accuracy[i][0]]), sorted_class_accuracy[i][1]))
+        
     print('\nTest Accuracy (Overall): %2d%% (%2d/%2d)' % (
         100. * np.sum(class_correct) / np.sum(class_total),
         np.sum(class_correct), np.sum(class_total)))
