@@ -179,7 +179,9 @@ Test Accuracy of Water Bottle: 100%
 
 ## Conclusions
 
-After analyzing those results, we can see that the last approach for training the classifier gives us best results. One thing to improve the accuracy could be using a lower learning rate (e.g. 0.0001) because the current learning rate of 0.001 seems to be too big. Also, with the new learning rate we could train the networks for more than 20 epochs to get better results. In other words, we should perform hyperparam tuning and try out different pairs of hyperparameters. 
+After analyzing those results, we can see that the last approach for training the classifier gives us best results. One thing to improve the accuracy could be using a lower learning rate (e.g. 0.0001) because the current learning rate of 0.001 seems to be too big. In training deep networks, it is helpful to reduce the learning rate as the number of training epochs increases. We could implement and include a 'Learning Rate Scheduler' which would decay the learning rate by some factor (like 0.1) every k epochs.
+
+Also, with the new learning rate we could train the networks for more than 20 epochs to get better results. In other words, we should perform hyperparameter tuning and try out different pairs of hyperparameters. 
 
 Let us have a look on the accuracy of several rare classes that we get using the best, third approach:
 
@@ -217,4 +219,30 @@ To get better results on the classes with a very small number of training sample
 
 Another good way to improve classification accuracy of the small classes in particular could be using the metadata from `styles.csv` (e.g. masterCategory and subCategory) as additional labels.
 
-Those and other ideas will be investigated in the future.
+
+## Improving the model
+
+### Data augmentation 
+See FIDataset_transfer_learning_2steps_augmentation.ipynb
+
+The first improvement to the model is using data augmentation. Following the third approach presented before, we apply the following transformation (which includes RandomHorizontalFlip) to the training dataset in step 2:
+
+```{r, engine='python', count_lines}
+# Data augmentation
+transform_augment = torchvision.transforms.Compose([
+                torchvision.transforms.Resize((224, 224)),
+                torchvision.transforms.RandomHorizontalFlip(),
+                torchvision.transforms.ToTensor(),
+                torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+            ])
+```
+We train the model with the same parameters for 20 epochs. The figure below shows train and valid loss during training.
+
+<img src="images/loss_142_aug.png"> 
+
+The overall **test accuracy is 71%** (14660/20634). Below we can see sample images along with predicted and true labels.
+
+<img src="images/sample_resuls_142_aug.png"> 
+
+We can see some minor improvement here. A good idea would be also including some random rotation or random crop but we leave this for further ivestigation. 
+
