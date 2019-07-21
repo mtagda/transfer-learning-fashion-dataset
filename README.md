@@ -179,7 +179,9 @@ Test Accuracy of Water Bottle: 100%
 
 ## Conclusions
 
-After analyzing those results, we can see that the last approach for training the classifier gives us best results. One thing to improve the accuracy could be using a lower learning rate (e.g. 0.0001) because the current learning rate of 0.001 seems to be too big. Also, with the new learning rate we could train the networks for more than 20 epochs to get better results. In other words, we should perform hyperparam tuning and try out different pairs of hyperparameters. 
+After analyzing those results, we can see that the last approach for training the classifier gives us best results. One thing to improve the accuracy could be using a lower learning rate (e.g. 0.0001) because the current learning rate of 0.001 seems to be too big. In training deep networks, it is helpful to reduce the learning rate as the number of training epochs increases. We could implement and include a 'Learning Rate Scheduler' which would decay the learning rate by some factor (like 0.1) every k epochs.
+
+Also, with the new learning rate we could train the networks for more than 20 epochs to get better results. In other words, we should perform hyperparam tuning and try out different pairs of hyperparameters. 
 
 Let us have a look on the accuracy of several rare classes that we get using the best, third approach:
 
