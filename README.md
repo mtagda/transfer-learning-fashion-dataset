@@ -76,3 +76,39 @@ Test Accuracy of  Ties: 97%
 Test Accuracy of Backpacks: 94%
 ```
 
+### Approach 2
+See FIDataset_transfer_learning_direct.ipynb
+
+We replace the last fully connected layer with a new one with 142 outputs and retrain the weights of the **whole** network.
+
+```{r, engine='python', count_lines}
+# Check if CUDA is available
+use_cuda = torch.cuda.is_available()
+
+# Specify model architecture 
+model = models.resnet50(pretrained=True)
+
+# To reshape the network, we reinitialize the classifier’s linear layer
+n_inp = model.fc.in_features
+model.fc = nn.Linear(n_inp, len(cat_list))
+
+if use_cuda:
+    model = model.cuda()
+```
+We train the network for 20 epochs. The figure below shows train and valid loss during training.
+
+<img src="images/loss_direct.png"> 
+
+The overall **test accuracy is 68%** (14144/20634). Below we can see sample images along with predicted and true labels.
+
+<img src="images/sample_resuls_direct.png"> 
+
+The top 5 classes with greatest accuracy are:
+
+```
+Test Accuracy of Sunglasses: 100%
+Test Accuracy of Kurta Sets: 100%
+Test Accuracy of Earrings: 100%
+Test Accuracy of Accessory Gift Set: 100%
+Test Accuracy of Water Bottle: 100%
+```
