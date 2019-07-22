@@ -244,5 +244,7 @@ The overall **test accuracy is 71%** (14660/20634). Below we can see sample imag
 
 <img src="images/sample_resuls_142_aug.png"> 
 
-We can see some minor improvement here. A good idea would be also including some random rotation or random crop but we leave this for further ivestigation. 
+We can see some minor improvement here (1% better accuracy). To see this on an example, please compare the predictions above with the predictions obtained for the same model without augmenting data. Before, the seventh image was classified as "Sport Sandals" and now it is considered as "Sandals" which is the correct class for this item. 
+
+Also note that a good idea would be also including some random rotation or random crop but we leave this for further ivestigation. 
 
