@@ -89,12 +89,24 @@ def train(n_epochs, train_loader, valid_loader, model, optimizer, criterion, use
     return model, train_loss_history, valid_loss_history
 
 
+def correct_top_k(output, target, topk=(1,)):
+    """Returns a tensor with 1 if target in top-k best guesses and 0 otherwise"""
+    with torch.no_grad():
+        maxk = max(topk)
+        batch_size = target.size(0)
+
+        _, pred = output.topk(maxk, 1, True, True)
+        pred = pred.t()
+        correct = pred.eq(target.view(1, -1).expand_as(pred)).sum(0, keepdim=True)
+        return correct[0]
+    
+    
 def test(test_loader, model, criterion, cat_lookup, use_cuda):    
     # initialize lists to monitor correct guesse and total number of data 
     test_loss = 0.0
     class_correct = list(0. for i in range(len(cat_lookup)))
+    class_correct_top_5 = list(0. for i in range(len(cat_lookup)))
     class_total = list(0. for i in range(len(cat_lookup)))
-
     model.eval() # prep model for evaluation
 
     for data, target in test_loader:
@@ -102,44 +114,56 @@ def test(test_loader, model, criterion, cat_lookup, use_cuda):
             data, target, model = data.cuda(), target.cuda(), model.cuda()
         #else:
         #    model = model.cpu()
+        
         # forward pass: compute predicted outputs by passing inputs to the model
         output = model(data)
         # calculate the loss
         loss = criterion(output, target)
         # update test loss 
         test_loss += loss.item()*data.size(0)
-        # convert output probabilities to predicted class
-        _, pred = torch.max(output, 1)
-        # compare predictions to true label
-        correct = np.squeeze(pred.eq(target.data.view_as(pred)))
+        
+        # get 1 if target in top-1 predictions
+        correct_top_1 = correct_top_k(output, target, topk=(1,))
+        # get 1 if target in top-5 predictions
+        correct_top_5 = correct_top_k(output, target, topk=(5,))
+        
         # calculate test accuracy for each object class
         for i in range(len(target)):
             label = target.data[i]
-            class_correct[label] += correct[i].item()
+            class_correct[label] += correct_top_1[i].item()
+            class_correct_top_5[label] += correct_top_5[i].item()
             class_total[label] += 1
             
     # calculate and print avg test loss
     test_loss = test_loss/len(test_loader.sampler)
     print('Test Loss: {:.6f}\n'.format(test_loss))
     
-    class_accuracy = {}
+    class_accuracy_top_1 = {}
     print('\nPrinting accuracy for each class')
     for i in range(len(cat_lookup)):
         if class_total[i] > 0:
-            accuracy = 100 * class_correct[i] / class_total[i]
-            class_accuracy[i] = accuracy
-            print('Test Accuracy of %5s: %2d%% (%2d/%2d)' % (
-                cat_lookup[i], accuracy,
-                np.sum(class_correct[i]), np.sum(class_total[i])))
+            accuracy_top_1 = 100 * class_correct[i] / class_total[i]
+            accuracy_top_5 = 100 * class_correct_top_5[i] / class_total[i]
+            class_accuracy_top_1[i] = accuracy_top_1
+            print('Test accuracy of %5s: \nTop-1 accuracy: %2d%% (%2d/%2d) \nTop-5 accuracy: %2d%% (%2d/%2d)'.format(
+            ) % (
+                cat_lookup[i], accuracy_top_1,
+                np.sum(class_correct[i]), np.sum(class_total[i]),
+                 accuracy_top_5, np.sum(class_correct_top_5[i]), np.sum(class_total[i])))
+            
+            
         else:
             print('Test Accuracy of %5s: N/A (no training examples)' % (cat_lookup[i]))
 
-    print('\nPrinting 5 classes with greatest accuracy')
-    sorted_class_accuracy = sorted(class_accuracy.items(),  key=lambda kv: kv[1], reverse=True)
+    print('\nPrinting 5 classes with greatest top-1 accuracy')
+    sorted_class_accuracy = sorted(class_accuracy_top_1.items(),  key=lambda kv: kv[1], reverse=True)
     for i in range(5):
         print('Test Accuracy of %5s: %2d%%' % (
             str(cat_lookup[sorted_class_accuracy[i][0]]), sorted_class_accuracy[i][1]))
         
-    print('\nTest Accuracy (Overall): %2d%% (%2d/%2d)' % (
+    print('\nTest Accuracy (Overall): \nTop-1 accuracy: %2d%% (%2d/%2d) \nTop-5 accuracy: %2d%% (%2d/%2d)' % (
         100. * np.sum(class_correct) / np.sum(class_total),
-        np.sum(class_correct), np.sum(class_total)))
+        np.sum(class_correct), np.sum(class_total),
+         100. * np.sum(class_correct_top_5) / np.sum(class_total),
+        np.sum(class_correct_top_5), np.sum(class_total)))
+    
