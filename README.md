@@ -109,7 +109,7 @@ Below we can see sample images along with predicted and true labels.
 
 <img src="images/sample_resuls_direct.png"> 
 
-The top 5 classes with greatest accuracy are:
+The top 5 classes with greatest Top-1 accuracy are:
 
 ```
 Test Accuracy of Sunglasses: 100%
@@ -143,7 +143,7 @@ The overall **test accuracy is 87%** (13243/15143). Below we can see sample imag
 
 <img src="images/sample_resuls_20.png"> 
 
-The top 5 classes with greatest accuracy are:
+The top 5 classes with greatest Top-1 accuracy are:
 
 ```
 Test Accuracy of Watches: 100%
@@ -185,7 +185,7 @@ Below we can see sample images along with predicted and true labels.
 
 <img src="images/sample_resuls_142.png"> 
 
-The top 5 classes with greatest accuracy are:
+The top 5 classes with greatest Top-1 accuracy are:
 
 ```
 Test Accuracy of Sunglasses: 100%
