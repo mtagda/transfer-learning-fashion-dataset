@@ -62,11 +62,17 @@ We train the network for 20 epochs. The figure below shows train and valid loss 
 
 <img src="images/loss_fconly.png"> 
 
-The overall **test accuracy is 49%** (10243/20634). Below we can see sample images along with predicted and true labels.
+The overall **test accuracy is:**
+```
+Top-1 accuracy: 49% (10171/20634) 
+Top-5 accuracy: 73% (15263/20634)
+```
+
+Below we can see sample images along with predicted and true labels.
 
 <img src="images/sample_resuls_fconly.png"> 
 
-The top 5 classes with greatest accuracy are:
+The top 5 classes with greatest Top-1 accuracy are:
 
 ```
 Test Accuracy of Sunglasses: 100%
@@ -93,7 +99,13 @@ We train the network for 20 epochs. The figure below shows train and valid loss 
 
 <img src="images/loss_direct.png"> 
 
-The overall **test accuracy is 68%** (14144/20634). Below we can see sample images along with predicted and true labels.
+The overall **test accuracy is:**
+```
+Top-1 accuracy: 68% (14112/20634) 
+Top-5 accuracy: 85% (17586/20634)
+```
+
+Below we can see sample images along with predicted and true labels.
 
 <img src="images/sample_resuls_direct.png"> 
 
@@ -163,7 +175,13 @@ We train the network for 20 epochs. The figure below shows train and valid loss 
 
 <img src="images/loss_142.png"> 
 
-The overall **test accuracy is 70%** (14640/20634). Below we can see sample images along with predicted and true labels.
+The overall **test accuracy is:**
+```
+Top-1 accuracy: 70% (14640/20634) 
+Top-5 accuracy: 86% (17746/20634)
+```
+
+Below we can see sample images along with predicted and true labels.
 
 <img src="images/sample_resuls_142.png"> 
 
@@ -240,11 +258,17 @@ We train the model with the same parameters for 20 epochs. The figure below show
 
 <img src="images/loss_142_aug.png"> 
 
-The overall **test accuracy is 71%** (14660/20634). Below we can see sample images along with predicted and true labels.
+The overall **test accuracy is:**
+```
+Top-1 accuracy: 72% (15022/20634) 
+Top-5 accuracy: 86% (17791/20634)
+```
+
+Below we can see sample images along with predicted and true labels.
 
 <img src="images/sample_resuls_142_aug.png"> 
 
-We can see some minor improvement here (1% better accuracy). To see this on an example, please compare the predictions above with the predictions obtained for the same model without augmenting data. Before, the seventh image was classified as "Sport Sandals" and now it is considered as "Sandals" which is the correct class for this item. 
+We can see some minor improvement here (2% better Top-1 accuracy). To see this on an example, please compare the predictions above with the predictions obtained for the same model without augmenting data. Before, the 9th image was classified as "Shirts" and now it is considered as "Sweatshirts" which is the correct class for this item. 
 
 Also note that a good idea would be also including some random rotation or random crop but we leave this for further ivestigation. 
 
