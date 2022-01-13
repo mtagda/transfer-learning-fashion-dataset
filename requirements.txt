@@ -6,7 +6,7 @@ kaggle-cli==0.12.13
 notebook==6.0.0
 numpy==1.16.4
 pandas==0.24.2
-Pillow==6.1.0
+Pillow==9.0.0
 scikit-learn==0.21.2
 sklearn==0.0
 torch==1.1.0
